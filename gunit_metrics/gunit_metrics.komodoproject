@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="2e671c0f-bca8-46a6-a25d-377913c019a1" kpf_version="5" name="gunit_metrics.komodoproject">
+<file id="14c661e5-e931-45fb-8c32-06e5acca06f8" idref="2e671c0f-bca8-46a6-a25d-377913c019a1" name="metrics.pl" url="metrics.pl">
+</file>
+<preference-set idref="2e671c0f-bca8-46a6-a25d-377913c019a1" id="project" preftype="project">
+  <long id="prefs_version">1</long>
+</preference-set>
+</project>
