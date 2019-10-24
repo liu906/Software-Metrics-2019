@@ -1,0 +1,573 @@
+File subst.c
+  Fullname: /home/lau/Assignment/Software Metrics/bash-4.2/subst.c
+  Local
+    Macros
+      ASSIGN_RETURN
+      CQ_RETURN
+      DEFAULT_ARRAY_SIZE
+      DEFAULT_INITIAL_ARRAY_SIZE
+      EXP_CHAR
+      issep
+      LBRACE
+      LPAREN
+      PARTIALLY_QUOTED
+      PF_IGNUNBOUND
+      PF_NOCOMSUB
+      PF_NOSPLIT2
+      PREPEND_LIST
+      RBRACE
+      RP_LONG_LEFT
+      RP_LONG_RIGHT
+      RP_SHORT_LEFT
+      RP_SHORT_RIGHT
+      RPAREN
+      SPECIAL_VAR
+      ST_BACKSL
+      ST_CTLESC
+      ST_DQUOTE
+      ST_SQUOTE
+      UNQUOTED
+      VALID_INDIR_PARAM
+      VALID_PARAM_EXPAND_CHAR
+      VALID_SPECIAL_LENGTH_PARAM
+      VT_ARRAYMEMBER
+      VT_ARRAYVAR
+      VT_ASSOCVAR
+      VT_POSPARMS
+      VT_STARSUB
+      VT_VARIABLE
+      WEXP_ALL
+      WEXP_BRACEEXP
+      WEXP_NOVARS
+      WEXP_PARAMEXP
+      WEXP_PATHEXP
+      WEXP_SHELLEXP
+      WEXP_TILDEEXP
+      WEXP_VARASSIGN
+      WHOLLY_QUOTED
+    Types
+      WORD_LIST *(char *, int) EXPFUNC
+    Variables
+      int expand_no_split_dollar_star
+      char expand_param_error
+      char expand_param_fatal
+      WORD_DESC expand_wdesc_error
+      WORD_DESC expand_wdesc_fatal
+      WORD_LIST expand_word_error
+      WORD_LIST expand_word_fatal
+      char extract_string_error
+      char extract_string_fatal
+      WORD_LIST *garglist
+      int no_longjmp_on_fatal_error
+    Functions
+      call_expand_word_internal
+      chk_arithsub
+      chk_atstar
+      do_assignment_internal
+      exp_jump_to_top_level
+      expand_string_for_rhs
+      expand_string_if_necessary
+      expand_string_internal
+      expand_string_leave_quoted
+      expand_string_to_string_internal
+      expand_word_internal
+      expand_word_list_internal
+      extract_delimited_string
+      extract_dollar_brace_string
+      get_var_and_type
+      getpatspec
+      getpattern
+      glob_expand_word_list
+      list_quote_escapes
+      list_remove_pattern
+      make_quoted_char
+      match_pattern
+      match_upattern
+      param_expand
+      parameter_brace_casemod
+      parameter_brace_expand
+      parameter_brace_expand_error
+      parameter_brace_expand_indir
+      parameter_brace_expand_length
+      parameter_brace_expand_rhs
+      parameter_brace_expand_word
+      parameter_brace_patsub
+      parameter_brace_remove_pattern
+      parameter_brace_substring
+      parameter_list_remove_pattern
+      pos_params
+      pos_params_modcase
+      pos_params_pat_subst
+      quote_list
+      quoted_strchr
+      read_comsub
+      remove_pattern
+      remove_upattern
+      separate_out_assignments
+      shell_expand_word_list
+      shouldexp_replacement
+      skip_double_quoted
+      skip_matched_pair
+      skip_single_quoted
+      skiparith
+      string_extract
+      string_extract_double_quoted
+      string_extract_single_quoted
+      string_extract_verbatim
+      unquoted_member
+      unquoted_substring
+      valid_brace_expansion_word
+      valid_length_expression
+      word_list_split
+  Global
+    Variables
+      int allow_null_glob_expansion
+      int assigning_in_environment
+      pid_t current_command_subst_pid
+      int fail_glob_expansion
+      unsigned char ifs_cmap
+      unsigned char ifs_firstc
+      char *ifs_value
+      SHELL_VAR *ifs_var
+      pid_t last_command_subst_pid
+      WORD_LIST *subst_assign_varlist
+    Functions
+      command_substitute
+      de_backslash
+      dequote_escapes
+      dequote_list
+      dequote_string
+      do_assignment
+      do_assignment_no_expand
+      do_word_assignment
+      expand_arith_string
+      expand_assignment_string_to_string
+      expand_prompt_string
+      expand_string
+      expand_string_assignment
+      expand_string_to_string
+      expand_string_unsplit
+      expand_string_unsplit_to_string
+      expand_word
+      expand_word_leave_quoted
+      expand_word_unsplit
+      expand_words
+      expand_words_no_vars
+      expand_words_shellexp
+      extract_arithmetic_subst
+      extract_command_subst
+      get_word_from_string
+      getifs
+      ifs_firstchar
+      list_rest_of_args
+      list_string
+      number_of_args
+      pat_subst
+      quote_escapes
+      quote_string
+      remove_quoted_escapes
+      remove_quoted_nulls
+      setifs
+      skip_to_delim
+      string_list
+      string_list_dollar_at
+      string_list_dollar_star
+      string_list_internal
+      string_list_pos_params
+      string_quote_removal
+      string_rest_of_args
+      strip_trailing_ifs_whitespace
+      sub_append_string
+      word_list_remove_quoted_nulls
+      word_split
+  Includes
+    bashansi.h
+      ansi_stdlib.h
+      memory.h  inactive
+      stdlib.h  inactive
+      string.h  inactive
+      strings.h  inactive
+    bashintl.h
+      gettext.h
+        libintl.h  inactive
+        locale.h  inactive
+      locale.h  inactive
+    bashtypes.h
+      inttypes.h  inactive
+      stdint.h  inactive
+      types.h
+    builtext.h
+    chartypes.h
+      ctype.h
+    common.h
+      stdc.h
+    config.h
+    errno.h
+    execute_cmd.h
+      stdc.h
+    filecntl.h
+      fcntl.h
+    flags.h
+      stdc.h
+    getopt.h
+      stdc.h
+    jobs.h
+      posixwait.h
+        unionwait.h
+        wait.h  inactive
+      quit.h
+      siglist.h
+      stdc.h
+    mailcheck.h
+    parser.h
+      command.h
+        stdc.h
+      input.h
+        stdc.h
+    pathexp.h
+    posixstat.h
+      stat.h
+    pwd.h  inactive
+    shell.h
+      arrayfunc.h
+      bashjmp.h
+        posixjmp.h
+          setjmp.h
+      command.h
+        stdc.h
+      config.h  inactive
+      dispose_cmd.h
+        stdc.h
+      error.h
+        stdc.h
+      externs.h
+        stdc.h
+      general.h
+        bashtypes.h
+          inttypes.h  inactive
+          stdint.h  inactive
+          types.h
+        chartypes.h
+          ctype.h
+        limits.h  inactive
+        resource.h  inactive
+        stdc.h
+        string.h  inactive
+        strings.h
+        time.h  inactive
+        xmalloc.h
+          bashansi.h
+          stdc.h
+      make_cmd.h
+        stdc.h
+      maxpath.h
+        limits.h  inactive
+        param.h  inactive
+      ocache.h
+      pathnames.h
+      quit.h
+      sig.h
+        stdc.h
+      subst.h
+        stdc.h
+      syntax.h
+      unwind_prot.h
+      variables.h
+        array.h
+          stdc.h
+        assoc.h
+          hashlib.h
+          stdc.h
+        conftypes.h
+        hashlib.h
+          stdc.h
+        stdc.h
+    shmbutil.h
+      config.h
+      shmbchar.h  inactive
+      stdc.h
+    signal.h
+    stdio.h
+    strmatch.h
+      config.h
+      stdc.h
+    tilde.h
+    trap.h
+      bashtypes.h  inactive
+        inttypes.h  inactive
+        stdint.h  inactive
+        types.h
+      signal.h  inactive
+      stdc.h
+    typemax.h
+    unistd.h  inactive
+  Externals Used
+    Functions
+      __builtin_memcpy
+      __ctype_b_loc
+      _setjmp
+      all_digits
+      all_variables_matching_prefix
+      alloc_word_desc
+      assign_in_env  pointer
+      assignment
+      bash_tilde_expand
+      bash_tilde_find_word
+      bind_variable
+      close  inactive
+      copy_word_list
+      dispose_word
+      dispose_word_desc
+      dispose_words
+      dup2
+      err_unboundvar
+      exit
+      fileno
+      find_function
+      find_shell_builtin
+      find_special_builtin
+      find_variable
+      free
+      free_pushed_string_input
+      jump_to_top_level
+      legal_identifier
+      list_append
+      list_reverse
+      make_bare_word
+      make_child
+      make_word
+      make_word_list
+      match_pattern_char
+      maybe_make_export_env
+      mbschr
+      memset  inactive
+      parse_and_execute
+      pipe  inactive
+      quote_string_for_globbing
+      report_error
+      reset_signal_handlers
+      run_exit_trap
+      set_pipestatus_from_exit
+      set_sigint_handler
+      sh_modcase
+      shell_glob_filename
+      stop_making_children
+      strchr
+      strcmp
+      strcpy  inactive
+      strcreplace
+      strip_trailing
+      strlen  inactive
+      strmatch
+      strncmp
+      strncpy
+      strvec_dispose
+      strvec_to_word_list
+      stupidly_hack_special_variables
+      substring
+      sys_error
+      top_level_cleanup
+      umatchlen
+      unquoted_glob_pattern_p
+      wait_for
+      which_set_flags
+      xmalloc
+      xparse_dolparen
+      xrealloc
+      xtrace_print_assignment
+      zread
+    Variables
+      current_fds_to_close  inactive
+      disallow_filename_globbing
+      dollar_vars
+      echo_command_at_execute
+      exit_immediately_on_error
+      expanding_redir
+      extended_glob
+      glob_error_return
+      interactive
+      interactive_shell
+      last_asynchronous_pid
+      last_command_exit_signal  inactive
+      last_command_exit_value  inactive
+      last_made_pid
+      parse_and_execute_level
+      place_keywords_in_env
+      posixly_correct  inactive
+      read_but_dont_execute
+      rest_of_args
+      return_catch
+      return_catch_flag
+      return_catch_value
+      shell_compatibility_level
+      sourcelevel
+      startup_state
+      subshell_environment  inactive
+      subshell_level
+      tempenv_assign_error
+      this_command_name
+      top_level
+      unbound_vars_is_error
+      wordexp_only  inactive
+    Types
+      arrayind_t
+      fd_bitmap
+      GENERIC_LIST
+      sh_wassign_func_t
+      SHELL_VAR
+      WORD_DESC
+      WORD_LIST
+    Macros
+      _
+      __CYGWIN__  inactive
+      __GNUC__  inactive
+      __isascii
+      __isctype
+      __P
+      add_string_to_list
+      ADVANCE_CHAR
+      ARRAY_VARS
+      ASS_APPEND
+      att_invisible
+      att_noassign
+      att_readonly
+      BRACE_EXPANSION
+      CASE_LOWER
+      CASE_LOWFIRST
+      CASE_TOGGLE
+      CASE_TOGGLEALL
+      CASE_UPFIRST
+      CASE_UPPER
+      CASEMOD_EXPANSIONS
+      CBLANK
+      CBSDQUOTE
+      CBSHDOC
+      COND_COMMAND
+      COPY_CHAR_I
+      COPY_CHAR_P
+      CSPECVAR
+      CSUBSTOP
+      CTLESC
+      CTLNUL
+      DEBUG
+      DECLARE_MBSTATE
+      DIGIT
+      DISCARD
+      DOLBRACE_OP
+      DOLBRACE_PARAM
+      DOLBRACE_QUOTE
+      DOLBRACE_WORD
+      ERREXIT
+      errno
+      EX_WEXPCOMSUB
+      EXECUTION_FAILURE
+      EXITPROG
+      EXTENDED_GLOB  inactive
+      FASTCOPY
+      FNM_NOMATCH
+      FNMATCH_EXTFLAG
+      FORCE_EOF
+      FREE
+      gettext
+      GLOB_FAILED
+      HANDLE_MULTIBYTE
+      HAVE_PWD_H
+      HAVE_UNISTD_H
+      HAVE_WCSDUP
+      IN_CTYPE_DOMAIN
+      INCLUDE_UNUSED
+      INLINE
+      INTMAX_MIN
+      invisible_p
+      ISALNUM
+      isalnum
+      ISALPHA
+      isalpha
+      isascii
+      isifs
+      JOB_CONTROL  inactive
+      legal_variable_char
+      legal_variable_starter
+      MATCH_ANY
+      MATCH_BEG
+      MATCH_END
+      MATCH_GLOBREP
+      MATCH_QUOTED
+      MATCH_STARSUB
+      MATCH_TYPEMASK
+      MB_CUR_MAX
+      MB_LEN_MAX
+      MB_STRLEN
+      MEMBER
+      member
+      NO_PID
+      noassign_p
+      NULL
+      PGRP_PIPE  inactive
+      PROCESS_SUBSTITUTION
+      Q_DOLBRACE
+      Q_DOUBLE_QUOTES
+      Q_HERE_DOCUMENT
+      Q_PATQUOTE
+      QGLOB_CVTNULL
+      QUOTED_NULL
+      READLINE
+      readonly_p
+      RESIZE_MALLOCED_BUFFER
+      REVERSE_LIST
+      SADD_MBCHAR
+      savestring
+      SCOPY_CHAR_I
+      SCOPY_CHAR_M
+      SD_INVERT
+      SD_NOJMP
+      SD_NOQUOTEDELIM
+      SD_NOSKIPCMD
+      setjmp
+      SEVAL_NOHIST
+      SEVAL_RESETLINE
+      shellblank
+      spctabnl
+      stderr
+      stdin
+      stdout
+      STREQ
+      STREQN
+      STRLEN
+      SUBSHELL_ASYNC
+      SUBSHELL_COMSUB
+      SUBSHELL_RESETTRAP
+      SX_COMMAND
+      SX_NOALLOC
+      SX_NOCTLESC
+      SX_NOESCCTLNUL
+      SX_NOLONGJMP
+      SX_POSIXEXP
+      SX_REQMATCH
+      SX_VARNAME
+      TODIGIT
+      value_cell
+      var_isset
+      VUNSETATTR
+      W_ARRAYIND
+      W_ASSIGNMENT
+      W_ASSIGNRHS
+      W_COMPASSIGN
+      W_DQUOTE
+      W_GLOBEXP
+      W_HASCTLESC
+      W_HASQUOTEDNULL
+      W_ITILDE
+      W_NOCOMSUB
+      W_NOEXPAND
+      W_NOGLOB
+      W_NOSPLIT
+      W_NOSPLIT2
+      W_NOTILDE
+      W_QUOTED
+      W_TILDEEXP
+  Metrics
+    9,392 (CountLine)
+    4,572 (CountLineCode)
+    1,257 (CountLineComment)
+    2,409 (CountLineInactive)
