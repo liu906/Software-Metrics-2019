@@ -5,10 +5,10 @@ $db = Understand::open("bash-4.2.udb");
 %tag = ();
 @files = glob("patches/bash42-???");
 
-#open( DATA, "<patches/bash42-001" ) or die "patch $file cannot be opened";
+
 
 foreach $patchfile (@files) {
-    #print "====================patch file :$patchfile===============\n";
+
 
     open DATA, "<$patchfile" or die "patch files cannot be opened";
     $lineNum = 0;
@@ -40,11 +40,7 @@ foreach $patchfile (@files) {
         }
 
         if($lineNum && $file){
-                  #      print "*********************************************\n",
-                  #$lineNum, " ", $file,"\n";
-            #print "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n";
-            #print "file is $file linenum is $lineNum\n";
-            #searchFunc($file,$lineNum);
+
             $lastFunc = "";
 
             $ufile = $db->lookup("$file","File");
@@ -62,19 +58,9 @@ foreach $patchfile (@files) {
                 }
                 
                 foreach $func (sort{$a->ref("Define")->line() <=> $b->ref("Define")->line();} @ents){
-                    #print "\$func line num is ",$func->ref()->line()," ",$func->name(),"\n";
-                    #if(!($func->kind()->longname() eq "C Function" || $func->kind()->longname() eq "C Function Static" )){
-                    #    next;
-                    #}
-                    #print $func->name(),"\n";
-                    #print $func->name(),$func->ref()->line(),"  $lineNum + 0.01\n";
+
                     if( $func->ref("Define")->line() > $lineNum ){
-                        #if($lineNum eq "7181"){
-                        #    print "*********************************************\n",
-                        #    $lineNum, " ", $file," ",$lastFunc,"\n";
-                        #}
-                        
-                        #print $lastFunc," ",$func->ref()->line()," ",$linenum,"\n";
+
                         if(exists($tag{$lastFunc}))
                         {
                             $tag{$lastFunc} += 1;
@@ -84,11 +70,11 @@ foreach $patchfile (@files) {
                             $tag{$lastFunc} = 1;
                             
                         }
-                        #print "===============================================\n"
+
                         last;
                     }
                     $lastFunc= $func->name();
-                    #print "^^^^^^^^^^^^^^^^^^$lastFunc^^^^^^^^^^^^^^^^^^^^\n"
+
                 }
             }
    
